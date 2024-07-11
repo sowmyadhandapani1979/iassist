@@ -1,0 +1,16 @@
+pluginManagement {
+    plugins {
+        id 'org.jetbrains.kotlin.jvm' version '2.0.0'
+    }
+}
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.5.0'
+}
+rootProject.name='iAssistApp'
+include ':app'
+getRootProject().projectDir = new File(rootDir, 'android/')
+apply from: file("node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+applyNativeModulesSettingsGradle(settings)
+includeBuild('node_modules/@react-native/gradle-plugin')
+
+

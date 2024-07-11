@@ -1,0 +1,48 @@
+type WaiterTableMapping @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  waitermodelID: ID! @index(name: "byWaiterModel")
+  tablemodelID: ID! @index(name: "byTableModel")
+  mappingState: WaiterState
+}
+
+enum AlertStateEnum {
+  CALLING
+  ACKNOWLEDGED
+  CANCELLED
+  LAPSED
+}
+
+enum AlertTypeEnum {
+  BILL
+  CALL
+}
+
+type Alert @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  AlertType: AlertTypeEnum
+  AlertState: AlertStateEnum
+  AlertTime: AWSDateTime
+  AckTime: AWSDateTime
+  AlertTable: TableModel @hasOne
+}
+
+enum WaiterState {
+  ENABLED
+  DISABLED
+  UNAVAILABLE
+}
+
+type WaiterModel @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String
+  State: WaiterState
+  W_TMapping: [WaiterTableMapping] @hasMany(indexName: "byWaiterModel", fields: ["id"])
+}
+
+type TableModel @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  TableNo: Int!
+  Description: String
+  W_TMapping: [WaiterTableMapping] @hasMany(indexName: "byTableModel", fields: ["id"])
+}
+ 
